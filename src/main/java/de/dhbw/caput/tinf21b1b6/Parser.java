@@ -21,9 +21,6 @@ final class Parser {
 		int openingBrackets = 0;
 		boolean group = false;
 
-		List<RegularExpression> literalsInOrder = new ArrayList<>();
-		List<Character> literalOperatorsInOrder = new ArrayList<>();
-
 		if (firstRun) {
 			searchForGroups(string);
 		}
@@ -41,12 +38,10 @@ final class Parser {
 						case '·':
 							i++;
 							result = parseConcatenation(string.substring(i), result);
-							// TODO if there is a group continue at the end of it;
 							break;
 						case '|':
 							i++;
 							result = parseUnion(string.substring(i), result);
-							// TODO if there is a group continue at the end of it;
 							break;
 						default:
 							// A Literal normally does not stand alone, except in the beginning of the RegEx.
@@ -75,7 +70,6 @@ final class Parser {
 						break;
 					case '|':
 						parsedGroups.set(i, new RegularExpression.Union(parsedGroups.get(i), parsedGroups.get(i + 1)));
-						// TODO if there is a group continue at the end of it;
 						break;
 					case '*':
 						parsedGroups.set(i, new RegularExpression.KleeneStar(parsedGroups.get(i)));
@@ -95,9 +89,6 @@ final class Parser {
 		groupOperationsInOrder = new ArrayList<>();
 		firstRun = true;
 		allGroupsFound = false;
-	}
-
-	private static void parseGroup(String substring) {
 	}
 
 	private static void searchForGroups(String string) {
@@ -150,6 +141,4 @@ final class Parser {
 
 		return new RegularExpression.Union(currentRegEx, second);
 	}
-
-
 }
